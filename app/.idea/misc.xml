@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="src/main/res/layout-land/activity_main.xml" value="0.1" />
+        <entry key="src/main/res/layout-land/content_quiz.xml" value="0.1" />
+        <entry key="src/main/res/layout/activity_main.xml" value="0.15070921985815602" />
+        <entry key="src/main/res/layout/content_quiz.xml" value="0.23192749023437503" />
+        <entry key="src/main/res/layout/submission.xml" value="0.1" />
+        <entry key="src/main/res/layout/toolbar.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="Android API 27 Platform" project-jdk-type="Android SDK" />
+</project>
