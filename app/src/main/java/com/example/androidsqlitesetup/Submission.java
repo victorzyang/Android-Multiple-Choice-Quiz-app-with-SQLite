@@ -53,8 +53,11 @@ public class Submission extends AppCompatActivity {
                     String email = getIntent().getStringExtra(MainActivity.EMAIL_KEY); //gets the email string from the MainActivity
 
                     //email the test results
-                    String emailURI = "mailto:" + email;
-                    Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse(emailURI));
+                    //String emailURI = "mailto:" + email;
+                    //Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse(emailURI));
+                    Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                    emailIntent.setData(Uri.parse("mailto:"));
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, email);
                     String emailSubject = "";
 
                     //call the insertTestData() method here
