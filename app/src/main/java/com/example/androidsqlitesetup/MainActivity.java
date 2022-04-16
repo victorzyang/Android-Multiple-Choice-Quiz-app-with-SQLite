@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    DBHelper myDb;
+    DBHelper myDb; //DBHelper instance used for inserting and reading database data
 
     private static final String TAG =  MainActivity.class.getSimpleName();
     private static final int RESULT = 0;
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mNextButton;
     private Button mPrevButton;
     private Button msubmitButton;
-    private Button mViewQuestionData; //TODO: add button onClickListener
+    private Button mViewQuestionData;
     private Button mViewAnswerKeyData;
     private Button mViewSubmissionInstructionData;
     private Button mViewTestData;
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mQuestionTextView;
     private ArrayList<Question> questions; //Have an arraylist of Questions, and each Question has 5 options and an answer
-    private ArrayList<Answer> answers; //Added for thesis
+    private ArrayList<Answer> answers; //Have an arraylist of Answers for each Question / Added for thesis
 
     private int mCurrentQuestionIndex; //used to determine which question user is on
     private static String QUESTION_INDEX_KEY = "question_index";
@@ -178,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
         msubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Should I call the db.insertTestData() method here???
 
                 Log.i(TAG, "Submit Button Clicked"); //print to console for debugging
                 Intent intent = new Intent(MainActivity.this, Submission.class); //goes to a new page
@@ -187,12 +186,14 @@ public class MainActivity extends AppCompatActivity {
 
                 intent.putExtra(EXAM_KEY, buttons); //have different keys
                 //startActivityForResult(intent, RESULT);
-                startForResult.launch(intent);
-                //startActivity(intent);
+                //startForResult.launch(intent);
+                startActivity(intent);
             }
         });
 
-        //Methods below are
+        //Following 5 methods below are for viewing the different tables in the database
+
+        //views the Questions table
         mViewQuestionData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -218,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //views the AnswerKey table
         mViewAnswerKeyData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -238,6 +240,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //views the Submission Instruction table
         mViewSubmissionInstructionData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -257,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //views the Test table
         mViewTestData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -277,6 +281,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //views the Student Info table
         mViewStudentInfoData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -298,6 +303,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //calls database method for deleting the data in AnswerKey table
         mDeleteAnswerKeyData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -330,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
         questions = parsedModel;
         Log.i(TAG, "Email is: " + emailString);
 
-        //Call the insertQuestionData() method below here
+        //Call the database insertQuestionData() method below here
         for (int i = 0; i < questions.size(); i++){
             String questionDesc = questions.get(i).getQuestionString();
             boolean questionInserted = myDb.insertQuestionData(questionDesc, questions.get(i).getQuestionOptions());
@@ -421,6 +427,7 @@ public class MainActivity extends AppCompatActivity {
         mButtonE.setBackgroundColor(Color.GRAY);
     }
 
+    //method for displaying an alert showing data from a database table
     private void showMessage(String title, String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);

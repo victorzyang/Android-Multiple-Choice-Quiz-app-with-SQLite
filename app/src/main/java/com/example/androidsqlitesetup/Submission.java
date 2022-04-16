@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class Submission extends AppCompatActivity {
 
-    DBHelper myDb;
+    DBHelper myDb; //DBHelper instance used for inserting student information and test data into database
 
     private EditText mNameText;
     private EditText mStudentNumberText;
@@ -60,7 +60,7 @@ public class Submission extends AppCompatActivity {
                     emailIntent.putExtra(Intent.EXTRA_EMAIL, email);
                     String emailSubject = "";
 
-                    //call the insertTestData() method here
+                    //call the database insertTestData() method here for each of the student's answers
                     for(int i = 0; i < 10; i++){ //goes through all of the student's answers in the identifier that was passed through explicit intents
                         Log.i(TAG, "" + array[i]); //debugging
                         boolean testDataInserted;
@@ -92,7 +92,7 @@ public class Submission extends AppCompatActivity {
                         }
                     }
 
-                    // call the insertStudentData() method here
+                    // call the database insertStudentData() method here for inserting student info
                     boolean studentDataInserted = myDb.insertStudentData(email, name, Integer.parseInt(number));
                     if (studentDataInserted) {
                         Toast.makeText(Submission.this, "Student data has been inserted into db", Toast.LENGTH_LONG).show();

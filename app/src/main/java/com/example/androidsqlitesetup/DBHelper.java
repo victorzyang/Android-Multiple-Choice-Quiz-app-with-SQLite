@@ -21,7 +21,7 @@ public class DBHelper extends SQLiteOpenHelper {
     //column ids
     public static final String QNUM_TABLE_COLUMN_ID = "Question_Number";
     public static final String EMAIL_TABLE_COLUMN_ID = "Email";
-    //
+    //column names
     public static final String Q_DESC_TABLE_COL = "Description";
     public static final String A_TABLE_COL = "A";
     public static final String B_TABLE_COL = "B";
@@ -36,14 +36,14 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME , null, 1);
     }
 
-    //May use the above constructor instead?
+    //Use the above constructor instead
     public DBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version); //I think the database gets initialized here
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
-        //Can I create multiple tables inside here??? -Yes
+    public void onCreate(SQLiteDatabase db) { //required method implement / creates all the tables in database
+        //Can I create multiple tables inside here? -Yes
         db.execSQL("create table " + QUESTIONS_TABLE + " (" + QNUM_TABLE_COLUMN_ID + " integer primary key autoincrement, " + Q_DESC_TABLE_COL + " text, " + A_TABLE_COL + " text, " + B_TABLE_COL + " text, " + C_TABLE_COL + " text, " + D_TABLE_COL + " text, " + E_TABLE_COL + " text)");
         db.execSQL("create table " + ANSWER_KEYS_TABLE + " (" + QNUM_TABLE_COLUMN_ID + " integer, " + ANSWER_TABLE_COL + " text)");
         db.execSQL("create table " + SUBMISSION_INSTRUCTION_TABLE + " (" + EMAIL_TABLE_COLUMN_ID + " text)");
@@ -52,11 +52,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
         //db = db.openOrCreateDatabase("database", Context.MODE_PRIVATE, null); //There's an error here
 
-        //db = DBHelper.this.openOrCreateDatabase("database", Context.MODE_PRIVATE, null); //Do I not have openOrCreateDatabase() here?
+        //db = DBHelper.this.openOrCreateDatabase("database", Context.MODE_PRIVATE, null); //I don't think I call openOrCreateDatabase() here
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { //required method to implement
         db.execSQL("DROP TABLE IF EXISTS " + QUESTIONS_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + ANSWER_KEYS_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + SUBMISSION_INSTRUCTION_TABLE);
@@ -65,6 +65,7 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    //inserts a new question to the Questions table
     public boolean insertQuestionData(String q_description, String[] options){
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -79,7 +80,7 @@ public class DBHelper extends SQLiteOpenHelper {
         long result = db.insert(QUESTIONS_TABLE, null, values); //insert() returns -1 if values are NOT inserted
 
         if(result == -1){
-            return false;
+            return false; //this determines if data does NOT get inserted
         }
         return true; //this determines if data gets inserted
     }
@@ -102,6 +103,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return true; //this determines if data gets inserted
     }
 
+    //inserts a new answer to the AnswerKey table
     public boolean insertAnswerKeyData(int q_num, String answer){
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -117,6 +119,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    //insert student's answer to the Test table
     public boolean insertTestData(String student_answer){
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -131,15 +134,17 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    //insert student information to both the Submission Instruction table and Student Info table
     public boolean insertStudentData(String email, String name, int student_num){
         SQLiteDatabase db = this.getWritableDatabase();
 
-        //Create ContentValues
-        ContentValues values1 = new ContentValues();
+        //Insert student email to the Submission Instruction table
+        ContentValues values1 = new ContentValues(); //Create ContentValues
         values1.put(EMAIL_TABLE_COLUMN_ID, email);
         long result1 = db.insert(SUBMISSION_INSTRUCTION_TABLE, null, values1);
 
-        ContentValues values2 = new ContentValues();
+        //Inserts all student information to the Student Info table
+        ContentValues values2 = new ContentValues(); //Create ContentValues
         values2.put(NAME_TABLE_COL, name);
         values2.put(EMAIL_TABLE_COLUMN_ID, email);
         values2.put(STUDENT_NUM_TABLE_COL, student_num);
@@ -152,7 +157,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    //How do I get data from multiple tables? (By having multiple get methods?)
+    //How do I get data from multiple tables? By having multiple get methods? -Yes
     public Cursor getQuestionsData(){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select * from " + QUESTIONS_TABLE, null);
@@ -183,6 +188,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return res;
     }
 
+    //method for deleting data from the Answer Keys table
     public Integer deleteData(){
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(ANSWER_KEYS_TABLE, null, null);
