@@ -85,7 +85,6 @@ public class Exam {
 
                         if(option_counter==5){
                             question = new Question(question_text, options, contributorName);
-                            //TODO: Call the insertQuestionData() method here?
                             questions.add(question);
                             option_counter = 0; //reset the option counter back to 0
                             options = new String[5];
